@@ -31,6 +31,8 @@ namespace Sandik.GuvenliDepolama
             Setting.MailPassword = ConfigurationManager.AppSettings["MailPassword"];
             Setting.MailPort = int.Parse(ConfigurationManager.AppSettings["MailPort"]);
             Setting.MailSecurity = ConfigurationManager.AppSettings["MailSecurity"];
+
+            Setting.AesKey = ConfigurationManager.AppSettings["AesKey"];
         }
     }
 }

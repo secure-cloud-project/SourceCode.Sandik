@@ -15,5 +15,11 @@ namespace Sandik.GuvenliDepolama.Models
         public DateTime CreationTime { get; set; }
         public DateTime LastLoginTime { get; set; }
         public bool IsTwoFactorPass { get; set; } = false;
+
+        public string NameEnc { get; set; }
+        public string SurNameEnc { get; set; }
+        public string MailEnc { get; set; }
+        public string PasswordEnc { get; set; } = "";
+
     }
 }

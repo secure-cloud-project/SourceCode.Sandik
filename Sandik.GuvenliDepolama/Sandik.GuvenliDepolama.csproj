@@ -131,6 +131,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\GenerateRandom.cs" />
+    <Compile Include="Manager\AesManager.cs" />
     <Compile Include="Manager\MailManager.cs" />
     <Compile Include="Manager\SqlManager.cs" />
     <Compile Include="Models\Setting.cs" />

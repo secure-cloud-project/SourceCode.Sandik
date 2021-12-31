@@ -19,9 +19,10 @@ namespace Sandik.GuvenliDepolama.Manager
                 {
 
                     var param = new DynamicParameters();
-                    param.Add("Name", item.Name);
-                    param.Add("Surname", item.SurName);
+                    param.Add("Name", item.NameEnc);
+                    param.Add("Surname", item.SurNameEnc);
                     param.Add("Mail", item.Mail);
+                    param.Add("MailEnc", item.MailEnc);
                     param.Add("Password", item.Password);
                     ret = connection.Query<string>("CreateUser", param: param, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
 

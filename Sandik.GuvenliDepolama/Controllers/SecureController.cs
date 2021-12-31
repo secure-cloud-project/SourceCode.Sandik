@@ -10,7 +10,7 @@ using System.Web.Mvc;
 namespace Sandik.GuvenliDepolama.Controllers
 {
     public class SecureController : Controller
-    {        
+    {
         public ActionResult Login()
         {
             return View();
@@ -24,7 +24,12 @@ namespace Sandik.GuvenliDepolama.Controllers
                 SqlManager sql = new SqlManager();
                 GenerateRandom gr = new GenerateRandom();
                 var secureCode = gr.GetRandomNumeric(6);
-                var user = sql.CheckUser(item.Mail, item.Password,secureCode);
+
+                //var secureCodeEnc = AesManager.Encrypt(secureCode, Setting.AesKey);
+                //item.MailEnc = AesManager.Encrypt(item.Mail, Setting.AesKey);
+                //item.PasswordEnc = AesManager.Encrypt(item.Password, Setting.AesKey);
+
+                var user = sql.CheckUser(item.Mail, item.Password, secureCode);
                 if (user != null)
                 {
                     isOK = true;
@@ -53,6 +58,11 @@ namespace Sandik.GuvenliDepolama.Controllers
             var err = "";
             try
             {
+                item.NameEnc = AesManager.Encrypt(item.Name, Setting.AesKey);
+                item.SurNameEnc = AesManager.Encrypt(item.SurName, Setting.AesKey);
+                item.MailEnc = AesManager.Encrypt(item.Mail, Setting.AesKey);
+                item.PasswordEnc = AesManager.Encrypt(item.Password, Setting.AesKey);
+
                 SqlManager sql = new SqlManager();
                 err = sql.AddUser(item);
                 isOK = err.Length == 0;

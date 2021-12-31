@@ -19,5 +19,6 @@ namespace Sandik.GuvenliDepolama.Models
         public static string FrontendKey { get; set; }
         public static string BackendKey { get; set; }
         public static string UploadFilePath { get; set; }
+        public static string AesKey { get; set; }
     }
 }

@@ -64,7 +64,7 @@
                 url: "/Secure/LoginTwoFactor",
                 data: param,
                 success: function (v) {
-                    debugger;
+                    //debugger;
                     if (v.isOk)
                         location.href = "/UserStorage";
                     else
