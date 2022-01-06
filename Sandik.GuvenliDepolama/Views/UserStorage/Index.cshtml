@@ -1,5 +1,13 @@
-﻿@section headers{
+﻿@using System.Web.Mvc;
+@using Sandik.GuvenliDepolama.Manager;
+@using Sandik.GuvenliDepolama.Models;
+@section headers{
     <link rel="stylesheet" href="~/Content/ChestTemplateWhite/KullaniciEkrani.css" media="screen">
+}
+@{
+    var user = (User)Session["User"];
+    SqlManager sql = new SqlManager();
+    var userFileList = sql.GetUserFile(user.ID);
 }
 <section class="u-clearfix u-section-1" id="sec-054b">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -31,20 +39,57 @@
     <div class="file-upload">
         <button class="file-upload-btn" type="button" back onclick="$('.file-upload-input').trigger( 'click' )">Dosya Ekleyin</button>
 
-        <div class="image-upload-wrap">
-            <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
-            <div class="drag-text">
-                <h3>Dosyalarınızı Buraya Sürükleyip Bırakabilirisiniz</h3>
+        <form>
+            <div class="image-upload-wrap">
+                <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                <div class="drag-text">
+                    <h3>Dosyalarınızı Buraya Sürükleyip Bırakabilirisiniz</h3>
+                </div>
             </div>
-        </div>
-        
-        <div class="file-upload-content">
-            <img class="file-upload-image" src="#" alt="your image" />
-            <div class="image-title-wrap">
-                <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded File</span></button>
+
+            <div class="file-upload-content">
+                <img class="file-upload-image" src="#" alt="your image" />
+                <div class="image-title-wrap">
+                    <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded File</span></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+    <form class="file-upload" id="uploadForm">
+        <input type="file" name="inpFile" id="inpFile"><br>
+        <input class="file-upload-btn" type="submit" value="Dosya yükle">
+        <br><br />
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-bar-fill">
+                <span class="progress-bar-text">0%</span>
             </div>
         </div>
 
+    </form>
+
+    <br><br />
+
+    <div class="file-upload">
+        <table style="width:100%">
+            <tr>
+                <th>Dosya Adı</th>
+                <th>Dosya Boyutu (Byte)</th>
+                <th>İşlem</th>
+            </tr>
+            @foreach (var item in userFileList)
+            {
+                <tr>
+                    <td>@item.FileNameOrjinal</td>
+                    <td>@item.FileSizeByte</td>
+                    <td><a href="UserStorage/DownloadFile?FileName=@item.FileNameGuid">İndir</a></td>
+                </tr>
+            }
+        </table>
     </div>
+
     <div class="u-clearfix u-sheet u-sheet-1"></div>
+
 </section>

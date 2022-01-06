@@ -42,7 +42,7 @@
                 url: "/Secure/SignIn",
                 data: param,
                 success: function (v) {
-                    debugger;
+                    //debugger;
                     if (v.isOk)
                         location.href = "/Secure/Login";
                     else
@@ -75,52 +75,108 @@
                 }
             });
 
-        });  
+        });
 
         $(':file').on('change', function () {
-            var file = this.files[0];
+            var file = this.files[0];            
 
-            if (file.size > 1024) {
-                alert('max upload size is 1k');
+            if (file.size > 40 * 1024 * 1024 ) {
+                alert('max upload size is 40MB');
             }
 
-            // Also see .name, .type
+            //var data = new FormData($('form')[0]);
+            //sendFile(file);
         });
 
-        $(':button').on('click', function () {
-            $.ajax({
-                // Your server script to process the upload
-                url: 'UserStorage/UploadFile',
-                type: 'POST',
+        const uploadForm = document.getElementById("uploadForm");
+        const inpFile = document.getElementById("inpFile");
+        var progressBarFill = $("#progressBar .progress-bar-fill")[0];            
+        const progressBarText = progressBarFill.querySelector(".progress-bar-text");
 
-                // Form data
-                data: new FormData($('form')[0]),
+        uploadForm.addEventListener("submit", uploadFile);
 
-                // Tell jQuery not to process data or worry about content-type
-                // You *must* include these options!
-                cache: false,
-                contentType: false,
-                processData: false,
+        function uploadFile(e) {
+            e.preventDefault();
+            debugger;
+            //var frm = $("#uploadForm")[0];
+            sendFile();
 
-                // Custom XMLHttpRequest
-                xhr: function () {
-                    var myXhr = $.ajaxSettings.xhr();
-                    if (myXhr.upload) {
-                        // For handling the progress of the upload
-                        myXhr.upload.addEventListener('progress', function (e) {
-                            if (e.lengthComputable) {
-                                $('progress').attr({
-                                    value: e.loaded,
-                                    max: e.total,
-                                });
-                            }
-                        }, false);
-                    }
-                    return myXhr;
+            //debugger;
+            //const xhr = new XMLHttpRequest();
+
+
+        }
+
+        var sendFile = function () {
+            //debugger;
+            //document.getElementById('uploadForm').onsubmit = function () {
+                var formdata = new FormData(); //FormData object
+                var fileInput = document.getElementById('inpFile');
+                //Iterating through each files selected in fileInput
+                for (i = 0; i < fileInput.files.length; i++) {
+                    //Appending each file to FormData object
+                    formdata.append(fileInput.files[i].name, fileInput.files[i]);
                 }
-            });
-        });
+                //Creating an XMLHttpRequest and sending
+                var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'UserStorage/UploadFile');
 
+                // burası return ün üzerindeydi
+                xhr.upload.addEventListener('progress', function (e) {
+                    var percent = e.lengthComputable ? (e.loaded / e.total) * 100 : 0;
+                    progressBarFill.style.width = percent.toFixed(2) + "%";
+                    progressBarText.textContent = percent.toFixed(2) + "%";
+                });
+
+                xhr.send(formdata);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        alert(xhr.responseText);
+                    }
+                }
+               
+                return false;
+            //}
+        }
+
+        //var sendFile_ = function (file) {
+        //    var data = new FormData();
+        //    var ifile = $("#inpFile")[0].files[0];
+        //    data.append(ifile.name, ifile);
+        //    //debugger;
+        //    $.ajax({
+        //        // Your server script to process the upload
+        //        url: 'UploadFile',
+        //        type: 'POST',
+
+        //        // Form data
+        //        data: data, //new FormData($('form')[0]),
+
+        //        // Tell jQuery not to process data or worry about content-type
+        //        // You *must* include these options!
+        //        cache: false,
+        //        contentType: 'multipart/form-data',
+        //        processData: false,
+
+        //        // Custom XMLHttpRequest
+        //        xhr: function () {
+        //            //debugger;
+        //            var myXhr = $.ajaxSettings.xhr();
+        //            if (myXhr.upload) {
+        //                // For handling the progress of the upload
+        //                myXhr.upload.addEventListener('progress', function (e) {
+        //                    if (e.lengthComputable) {
+        //                        $('progress').attr({
+        //                            value: e.loaded,
+        //                            max: e.total,
+        //                        });
+        //                    }
+        //                }, false);
+        //            }
+        //            return myXhr;
+        //        }
+        //    });
+        //}   
     }
 };
 

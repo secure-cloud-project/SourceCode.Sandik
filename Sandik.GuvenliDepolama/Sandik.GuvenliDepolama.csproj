@@ -49,6 +49,9 @@
       <HintPath>..\packages\Dapper.2.0.123\lib\net461\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SharpAESCrypt, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpAESCrypt.dll.1.3.4\lib\netstandard2.0\SharpAESCrypt.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -132,11 +135,13 @@
     </Compile>
     <Compile Include="Helper\GenerateRandom.cs" />
     <Compile Include="Manager\AesManager.cs" />
+    <Compile Include="Manager\FileManager.cs" />
     <Compile Include="Manager\MailManager.cs" />
     <Compile Include="Manager\SqlManager.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\TwoFactor.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using SharpAESCrypt;
 
 namespace Sandik.GuvenliDepolama.Manager
 {
@@ -142,7 +143,6 @@ namespace Sandik.GuvenliDepolama.Manager
                 hex.AppendFormat("{0:x2}", b);
             return hex.ToString();
         }
-
 
     }
 }

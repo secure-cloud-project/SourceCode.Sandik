@@ -86,5 +86,52 @@ namespace Sandik.GuvenliDepolama.Manager
             }
             return ret;
         }
+
+        public bool SetUserFile(UserFile fileInfo)
+        {
+            var ret = true;
+            try
+            {
+                using (var connection = new SqlConnection(Setting.ConnectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("UserID", fileInfo.UserID);
+                    param.Add("FileNameGuid", fileInfo.FileNameGuid);
+                    param.Add("FileNameOrjinal", fileInfo.FileNameOrjinal);
+                    param.Add("FilePath", fileInfo.FilePath);
+                    param.Add("FileSizeByte", fileInfo.FileSizeByte);
+
+                    ret = connection.Execute("dbo.SetUserFile", param, commandType: System.Data.CommandType.StoredProcedure) > 0;                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                throw new Exception("Dosya bilgisi dbye kayıt edilirken hata oldu.", ex);
+            }
+            return ret;
+        }
+
+        public List<UserFile> GetUserFile(int UserID,string FileNameOriginal="")
+        {
+            List<UserFile> items = new List<UserFile>();
+            try
+            {
+                using (var connection = new SqlConnection(Setting.ConnectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("UserID", UserID);
+                    param.Add("FileName", FileNameOriginal);
+
+                   items = connection.Query<UserFile>("dbo.GetUserFile", param, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Dosya bilgisi çekilemedi", ex);
+            }
+            return items;
+        }
     }
 }

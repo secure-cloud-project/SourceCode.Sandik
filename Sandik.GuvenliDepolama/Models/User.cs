@@ -8,6 +8,7 @@ namespace Sandik.GuvenliDepolama.Models
     public class User
     {
         public int ID { get; set; }
+        public string LicenseID { get; set; }
         public string Name { get; set; }
         public string SurName { get; set; }
         public string Mail { get; set; }

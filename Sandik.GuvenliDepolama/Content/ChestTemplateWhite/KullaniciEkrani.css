@@ -148,7 +148,7 @@ body {
 
 .file-upload {
   background-color: #ffffff;
-  width: 600px;
+  width: 700px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -260,4 +260,25 @@ body {
 .container {
   max-width: 750px;
   padding: 15px;
+}
+
+.progress-bar {
+    height: 35px;
+    width: 100%;
+    border: 2px solid lightcyan;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: cornflowerblue;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    transition: width 0.25s;
+}
+
+.progress-bar-text {
+    margin-left: 10px;
+    font-weight: bold;
 }
