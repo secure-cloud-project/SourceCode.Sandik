@@ -84,7 +84,10 @@
                 <tr>
                     <td>@item.FileNameOrjinal</td>
                     <td>@item.FileSizeByte</td>
-                    <td><a href="UserStorage/DownloadFile?FileName=@item.FileNameGuid">İndir</a></td>
+                    <td>
+                        <a href="UserStorage/DownloadFile?FileName=@item.FileNameGuid">İndir</a>
+                        <a href="#" class="deletefile" val="@item.FileNameGuid">Sil</a>
+                    </td>
                 </tr>
             }
         </table>

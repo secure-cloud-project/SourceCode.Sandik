@@ -15,6 +15,10 @@ namespace Sandik.GuvenliDepolama.Models
         public string FilePath { get; set; }
 
         public Int64 FileSizeByte { get; set; }
-        
+
+        public int ID { get; set; }
+
+        public int IsDeleted { get; set; }
+
     }
 }

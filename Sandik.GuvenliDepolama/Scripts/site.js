@@ -132,12 +132,34 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         alert(xhr.responseText);
+                        window.location.reload();
                     }
                 }
                
                 return false;
             //}
         }
+
+        $(".deletefile").click(function (e) {
+            e.preventDefault();            
+            var p = {
+                fileID : $(this).attr("val")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/UserStorage/DeleteFile",
+                data: p,
+                success: function (v) {                    
+                    if (v.isOk)
+                        window.location.reload();
+                    else
+                        alert(v.Msj);
+                },
+                error: function () {
+                    alert("Beklenmeyen bir hata meydana geldi.");
+                }
+            });           
+        });
 
         //var sendFile_ = function (file) {
         //    var data = new FormData();

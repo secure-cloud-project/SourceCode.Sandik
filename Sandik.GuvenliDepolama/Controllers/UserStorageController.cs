@@ -49,7 +49,9 @@ namespace Sandik.GuvenliDepolama.Controllers
                         var fileNameOrginal = Path.GetFileName(fileContent.FileName);                        
                         var fileNameGuid = $"{Guid.NewGuid()}{Path.GetExtension(fileContent.FileName)}";
 
-                        var path = Path.Combine(Server.MapPath($"~/{Setting.UploadFilePath}"), fileNameGuid);
+
+                        var filePathDirection = Setting.UploadFilePath.IndexOf(":\\") >= 0 ? Setting.UploadFilePath : Server.MapPath($"~/{Setting.UploadFilePath}");
+                        var path = Path.Combine(filePathDirection, fileNameGuid);
                         using (var fileStream = System.IO.File.Create(path))
                         {
                             Stream dataStream = new MemoryStream(dataEncrypt);
@@ -104,6 +106,32 @@ namespace Sandik.GuvenliDepolama.Controllers
             var fileDecrypt = fm.Decrypt(fileByte, user.LicenseID);
 
             return File(fileDecrypt, Path.GetExtension(file.FilePath), file.FileNameOrjinal);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteFile(string fileID)
+        {
+            var isOK = true;
+            var user = (User)Session["User"];
+            SqlManager sql = new SqlManager();
+            var file = sql.GetUserFile(user.ID, fileID).FirstOrDefault();
+
+            //Dosya var mı kontrolü
+            if (System.IO.File.Exists(file.FilePath))
+            {
+                //Fiziksel Dosya silme
+                System.IO.File.Delete(file.FilePath);
+                //Sql dosya silme                
+                UserFile uf = new UserFile
+                {
+                    ID = file.ID,
+                    IsDeleted = 1,
+                    UserID = user.ID                   
+                };
+                sql.SetUserFileDelete(uf);
+            }
+
+            return Json(new { isOk = isOK }, JsonRequestBehavior.AllowGet);
         }
 
         public static byte[] ToByteArray(Stream input)

@@ -113,6 +113,30 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+        public bool SetUserFileDelete(UserFile fileInfo)
+        {
+            var ret = true;
+            try
+            {
+                using (var connection = new SqlConnection(Setting.ConnectionString))
+                {
+                    var param = new DynamicParameters();
+                    param.Add("UserID", fileInfo.UserID);
+                    param.Add("ID", fileInfo.ID);
+                    param.Add("IsDeleted", fileInfo.IsDeleted);                  
+
+                    ret = connection.Execute("dbo.SetUserFile", param, commandType: System.Data.CommandType.StoredProcedure) > 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                throw new Exception("Dosya bilgisi dbden silinirken hata oldu.", ex);
+            }
+            return ret;
+        }
+
         public List<UserFile> GetUserFile(int UserID,string FileNameOriginal="")
         {
             List<UserFile> items = new List<UserFile>();
