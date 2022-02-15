@@ -21,11 +21,17 @@ namespace Sandik.GuvenliDepolama.Controllers
         }
 
 
+        /// <summary>
+        ///  dosya yukleme kismi
+        /// </summary>
+        /// <param name="File"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase File)
         {
             try
             {
+                // kullanici bilgileri session dan cekiliyor
                 #region Kullanıcı Bilgileri
                 var user = (User)Session["User"];
                 #endregion
@@ -93,6 +99,11 @@ namespace Sandik.GuvenliDepolama.Controllers
             return Json("File uploaded successfully");
         }
 
+        /// <summary>
+        /// dosya indirme kismi
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public ActionResult DownloadFile(string fileName)
         {
             var user = (User)Session["User"];
@@ -108,6 +119,11 @@ namespace Sandik.GuvenliDepolama.Controllers
             return File(fileDecrypt, Path.GetExtension(file.FilePath), file.FileNameOrjinal);
         }
 
+        /// <summary>
+        /// dosyayi silme kismi
+        /// </summary>
+        /// <param name="fileID"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult DeleteFile(string fileID)
         {
@@ -134,6 +150,7 @@ namespace Sandik.GuvenliDepolama.Controllers
             return Json(new { isOk = isOK }, JsonRequestBehavior.AllowGet);
         }
 
+
         public static byte[] ToByteArray(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
@@ -148,6 +165,11 @@ namespace Sandik.GuvenliDepolama.Controllers
             }
         }
 
+        /// <summary>
+        /// burada dosyayi indirmek icin dogru formata aliyoruz
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public byte[] FileToByteArray(string fileName)
         {
             byte[] buff = null;

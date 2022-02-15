@@ -10,6 +10,11 @@ namespace Sandik.GuvenliDepolama.Manager
 {
     public class SqlManager
     {
+        /// <summary>
+        /// disaridan gelen bilgileri sql procedure'une cagirip gonderiyor procedure bu bilgileri kullanarak yeni kayit ekliyor
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public string AddUser(User item)
         {
             var ret = "";
@@ -35,6 +40,13 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+        /// <summary>
+        /// disaridan gelen bilgileri sql procedure'une cagirip gonderiyor procedure giris bilgilerin kontrol ediyor
+        /// </summary>
+        /// <param name="Mail"></param>
+        /// <param name="Password"></param>
+        /// <param name="SecureCode"></param>
+        /// <returns></returns>
         public User CheckUser(string Mail, string Password,string SecureCode)
         {
             var ret = new User();
@@ -57,6 +69,12 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+        /// <summary>
+        /// disaaridan gelen bilgileri sql procedure'une cagirip gonderiyor procedure bilgiler secure kodu kontrol ediyor
+        /// </summary>
+        /// <param name="Mail"></param>
+        /// <param name="SecureCode"></param>
+        /// <returns></returns>
         public string CheckSecureCode(string Mail,string SecureCode)
         {
             var ret = "";
@@ -87,14 +105,21 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+        /// <summary>
+        /// burada yuklenen dosyanin bilgisini sql e kayit ediyoruz
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <returns></returns>
         public bool SetUserFile(UserFile fileInfo)
         {
             var ret = true;
             try
             {
-                using (var connection = new SqlConnection(Setting.ConnectionString))
+                using (var connection = new SqlConnection(Setting.ConnectionString))// connection stringi dışarıdan web.config den alıyor
                 {
                     var param = new DynamicParameters();
+
+                    // burada parametreleri ekliyor
                     param.Add("UserID", fileInfo.UserID);
                     param.Add("FileNameGuid", fileInfo.FileNameGuid);
                     param.Add("FileNameOrjinal", fileInfo.FileNameOrjinal);
@@ -113,18 +138,27 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <returns></returns>
         public bool SetUserFileDelete(UserFile fileInfo)
         {
+            
             var ret = true;
             try
             {
                 using (var connection = new SqlConnection(Setting.ConnectionString))
                 {
                     var param = new DynamicParameters();
+                    // burada parametreleri ekliyoruz
                     param.Add("UserID", fileInfo.UserID);
                     param.Add("ID", fileInfo.ID);
                     param.Add("IsDeleted", fileInfo.IsDeleted);                  
 
+                    // deger ekledigimiz parametreleri burada sql procedure une gonderiyoruz
                     ret = connection.Execute("dbo.SetUserFile", param, commandType: System.Data.CommandType.StoredProcedure) > 0;
                 }
 
@@ -137,6 +171,12 @@ namespace Sandik.GuvenliDepolama.Manager
             return ret;
         }
 
+        /// <summary>
+        /// burada kullanici gşrşs yaptktan sonra asagiya dosyalarini listelemeyi sagliyoruz
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="FileNameOriginal"></param>
+        /// <returns></returns>
         public List<UserFile> GetUserFile(int UserID,string FileNameOriginal="")
         {
             List<UserFile> items = new List<UserFile>();
@@ -148,6 +188,7 @@ namespace Sandik.GuvenliDepolama.Manager
                     param.Add("UserID", UserID);
                     param.Add("FileName", FileNameOriginal);
 
+                    // sql de getUserFile isimli procedure cagiriliyor ve pyukarida girdgimiz parametreler gonderiliyor
                    items = connection.Query<UserFile>("dbo.GetUserFile", param, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 }
             }
